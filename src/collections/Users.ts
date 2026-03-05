@@ -13,7 +13,8 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-      required: true,
+      required: false,
+      defaultValue: 'Professor',
       label: 'Nome do Professor/Usuário',
     },
   ],
