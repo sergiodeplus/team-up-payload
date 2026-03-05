@@ -15,6 +15,8 @@ export const Users: CollectionConfig = {
     update: ({ req: { user }, id }) => {
       if (!user) return false;
       if (user.role === 'admin' || typeof user.role === 'undefined') return true;
+      // If no id is passed (global check), allow true so they can see the edit button, but document-level will restrict them
+      if (!id) return true;
       return user.id === id;
     },
     delete: ({ req: { user } }) => {
@@ -35,8 +37,9 @@ export const Users: CollectionConfig = {
       name: 'role',
       type: 'select',
       label: 'Papel do Usuário',
-      required: true,
+      required: false, // Must be false so DB schema push doesn't fail on existing rows
       defaultValue: 'teacher',
+      saveToJWT: true,
       options: [
         { label: 'Coordenadora (Admin)', value: 'admin' },
         { label: 'Professor', value: 'teacher' },
