@@ -13,9 +13,16 @@ import { Reservations } from './collections/Reservations'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const frontendUrls = [
+  'http://localhost:3001',
+  'http://127.0.0.1:3001',
+  'http://localhost:5173',
+  process.env.FRONTEND_URL || '',
+].filter(Boolean)
+
 export default buildConfig({
-  cors: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173'],
-  csrf: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173'],
+  cors: frontendUrls,
+  csrf: frontendUrls,
   admin: {
     user: Users.slug,
     importMap: {
