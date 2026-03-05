@@ -1,4 +1,5 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -27,11 +28,19 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URL || 'file:./team-up-payload.db',
-    },
-  }),
+  db: process.env.DATABASE_URL?.startsWith('postgres')
+    ? postgresAdapter({
+      pool: {
+        connectionString: process.env.DATABASE_URL,
+        max: 10,
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      },
+    })
+    : sqliteAdapter({
+      client: {
+        url: process.env.DATABASE_URL || 'file:./team-up-payload.db',
+      },
+    }),
   sharp,
   plugins: [],
 })
