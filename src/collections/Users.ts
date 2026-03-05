@@ -7,6 +7,20 @@ export const Users: CollectionConfig = {
   },
   access: {
     read: () => true, // Allows frontend to get user info if needed
+    create: ({ req: { user } }) => {
+      if (!user) return false; // Prevent unauthenticated user creation (except first-user init which bypasses this)
+      // Allow if admin or if role is undefined (to prevent locking out the current only user)
+      return user.role === 'admin' || typeof user.role === 'undefined';
+    },
+    update: ({ req: { user }, id }) => {
+      if (!user) return false;
+      if (user.role === 'admin' || typeof user.role === 'undefined') return true;
+      return user.id === id;
+    },
+    delete: ({ req: { user } }) => {
+      if (!user) return false;
+      return user.role === 'admin' || typeof user.role === 'undefined';
+    },
   },
   auth: true,
   fields: [
@@ -16,6 +30,23 @@ export const Users: CollectionConfig = {
       required: false,
       defaultValue: 'Professor',
       label: 'Nome do Professor/Usuário',
+    },
+    {
+      name: 'role',
+      type: 'select',
+      label: 'Papel do Usuário',
+      required: true,
+      defaultValue: 'teacher',
+      options: [
+        { label: 'Coordenadora (Admin)', value: 'admin' },
+        { label: 'Professor', value: 'teacher' },
+      ],
+      access: {
+        update: ({ req: { user } }) => {
+          if (!user) return false;
+          return user.role === 'admin' || typeof user.role === 'undefined';
+        },
+      },
     },
   ],
 }

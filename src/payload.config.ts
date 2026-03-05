@@ -18,6 +18,7 @@ const frontendUrls = [
   'http://127.0.0.1:3001',
   'http://localhost:5173',
   process.env.FRONTEND_URL || '',
+  'https://team-up-payload.vercel.app',
 ].filter(Boolean)
 
 export default buildConfig({
