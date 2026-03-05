@@ -19,6 +19,7 @@ const frontendUrls = [
   'http://localhost:5173',
   process.env.FRONTEND_URL || '',
   'https://team-up-payload.vercel.app',
+  'https://escola-reservas.surge.sh',
 ].filter(Boolean)
 
 export default buildConfig({
