@@ -42,6 +42,7 @@ export default buildConfig({
         max: 10,
         ssl: { rejectUnauthorized: false },
       },
+      push: true,
     })
     : sqliteAdapter({
       client: {
