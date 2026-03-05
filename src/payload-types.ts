@@ -69,9 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    activities: Activity;
-    links: Link;
-    students: Student;
+    reservations: Reservation;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,9 +79,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    activities: ActivitiesSelect<false> | ActivitiesSelect<true>;
-    links: LinksSelect<false> | LinksSelect<true>;
-    students: StudentsSelect<false> | StudentsSelect<true>;
+    reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -129,6 +125,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -169,58 +166,17 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "activities".
+ * via the `definition` "reservations".
  */
-export interface Activity {
+export interface Reservation {
   id: number;
-  title: string;
-  year: '6ano' | '7ano' | '8ano' | '9ano';
-  unit: '1' | '2' | '3';
-  description?: string | null;
-  linkUrl: string;
-  imageUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "links".
- */
-export interface Link {
-  id: number;
-  title: string;
-  url: string;
-  icon: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "students".
- */
-export interface Student {
-  id: number;
-  name: string;
-  avatar: string;
-  badges?:
-    | (
-        | 'historiador'
-        | 'viajante'
-        | 'debate'
-        | 'conexoes'
-        | 'leitor'
-        | 'critico'
-        | 'poeta'
-        | 'arquiteto'
-        | 'palavras'
-        | 'revisor'
-        | 'contador'
-        | 'argumento'
-        | 'colaborador'
-        | 'persistencia'
-        | 'digital'
-      )[]
-    | null;
+  professor_name: string;
+  equipment_type: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  subject?: string | null;
+  class_name?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -257,16 +213,8 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'activities';
-        value: number | Activity;
-      } | null)
-    | ({
-        relationTo: 'links';
-        value: number | Link;
-      } | null)
-    | ({
-        relationTo: 'students';
-        value: number | Student;
+        relationTo: 'reservations';
+        value: number | Reservation;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -315,6 +263,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -352,37 +301,16 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "activities_select".
+ * via the `definition` "reservations_select".
  */
-export interface ActivitiesSelect<T extends boolean = true> {
-  title?: T;
-  year?: T;
-  unit?: T;
-  description?: T;
-  linkUrl?: T;
-  imageUrl?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "links_select".
- */
-export interface LinksSelect<T extends boolean = true> {
-  title?: T;
-  url?: T;
-  icon?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "students_select".
- */
-export interface StudentsSelect<T extends boolean = true> {
-  name?: T;
-  avatar?: T;
-  badges?: T;
+export interface ReservationsSelect<T extends boolean = true> {
+  professor_name?: T;
+  equipment_type?: T;
+  date?: T;
+  start_time?: T;
+  end_time?: T;
+  subject?: T;
+  class_name?: T;
   updatedAt?: T;
   createdAt?: T;
 }
